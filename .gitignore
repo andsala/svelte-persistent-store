@@ -1,0 +1,10 @@
+.DS_Store
+
+.idea/
+.vscode/
+
+node_modules/
+
+/types
+/index.js
+/index.mjs
