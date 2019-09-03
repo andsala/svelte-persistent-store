@@ -1,29 +1,37 @@
-import sucrase from 'rollup-plugin-sucrase';
 import typescript from 'rollup-plugin-typescript';
 
-const is_publish = !!process.env.PUBLISH;
-
-const ts_plugin = is_publish
-    ? typescript({
-      include: 'src/**',
-      typescript: require('typescript')
-    })
-    : sucrase({
-      transforms: ['typescript']
-    });
+const ts_plugin = typescript({
+  include: 'src/**',
+  typescript: require('typescript')
+});
 
 const external = id => id.startsWith('svelte/');
 
 export default [
   {
-    input: `src/index.ts`,
+    input: `src/local.ts`,
     output: [
       {
-        file: `index.mjs`,
+        file: `local.mjs`,
         format: 'esm',
       },
       {
-        file: `index.js`,
+        file: `local.js`,
+        format: 'cjs',
+      }
+    ],
+    external,
+    plugins: [ts_plugin]
+  },
+  {
+    input: `src/session.ts`,
+    output: [
+      {
+        file: `session.mjs`,
+        format: 'esm',
+      },
+      {
+        file: `session.js`,
         format: 'cjs',
       }
     ],

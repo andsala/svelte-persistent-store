@@ -6,5 +6,7 @@
 node_modules/
 
 /types
-/index.js
-/index.mjs
+/local.js
+/local.mjs
+/session.js
+/session.mjs

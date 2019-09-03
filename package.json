@@ -2,7 +2,9 @@
   "name": "svelte-persistent-store",
   "version": "0.0.1",
   "description": "A Svelte persistent store",
-  "main": "index.js",
+  "main": "local.js",
+  "module": "local.mjs",
+  "types": "types/**",
   "scripts": {
     "build": "rollup -c && npm run tsd",
     "dev": "rollup -cw",
@@ -23,7 +25,6 @@
     "@types/mocha": "^5.2.7",
     "mocha": "^6.2.0",
     "rollup": "^1.20.3",
-    "rollup-plugin-sucrase": "^2.1.0",
     "rollup-plugin-typescript": "^1.0.1",
     "svelte": "^3.9.1",
     "tslib": "^1.10.0",
