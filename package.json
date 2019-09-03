@@ -1,7 +1,14 @@
 {
   "name": "svelte-persistent-store",
   "version": "0.0.1",
-  "description": "A Svelte persistent store",
+  "description": "Persist your svelte store in localStorage or sessionStorage",
+  "author": "Andrea Salamone",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andsala/svelte-persistent-store.git"
+  },
+  "homepage": "https://github.com/andsala/svelte-persistent-store",
   "main": "local.js",
   "module": "local.mjs",
   "types": "types/**",
@@ -16,8 +23,6 @@
     "store",
     "persistent"
   ],
-  "author": "Andrea Salamone",
-  "license": "MIT",
   "peerDependencies": {
     "svelte": "^3.9.1"
   },
@@ -29,5 +34,12 @@
     "svelte": "^3.9.1",
     "tslib": "^1.10.0",
     "typescript": "^3.6.2"
-  }
+  },
+  "files": [
+    "types",
+    "local.js",
+    "local.mjs",
+    "session.js",
+    "session.mjs"
+  ]
 }
