@@ -1,6 +1,6 @@
 {
   "name": "svelte-persistent-store",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Persist your svelte store in localStorage or sessionStorage",
   "author": "Andrea Salamone",
   "license": "MIT",
@@ -39,7 +39,10 @@
     "types",
     "local.js",
     "local.mjs",
+    "local.d.ts",
     "session.js",
-    "session.mjs"
+    "session.mjs",
+    "session.d.ts",
+    "generator.d.ts"
   ]
 }
