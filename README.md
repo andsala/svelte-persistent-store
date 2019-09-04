@@ -2,6 +2,12 @@
 
 Persist your [svelte store](https://svelte.dev/docs#svelte_store) in `localStorage` or `sessionStorage`.
 
+## Install
+
+```sh
+npm install --save svelte-persistent-store
+```
+
 ## Usage
 
 Persist to `localStorage`

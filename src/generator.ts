@@ -25,9 +25,9 @@ type StoresValues<T> = T extends Readable<infer U> ? U :
 
 export type StoreModule = {
     readable: (key: string, value: string, start: StartStopNotifier<string>) => Readable<string>;
-    writable: (key: string, value: string, start: StartStopNotifier<string>) => Writable<string>;
+    writable: (key: string, value: string, start?: StartStopNotifier<string>) => Writable<string>;
     derived: <S extends Stores>(key: string, stores: S, fn: (values: StoresValues<S>, set?: Subscriber<string>) => string | Unsubscriber | void, initial_value?: string) => Readable<string>;
-    get: (store: any) => any;
+    get: typeof ogGet;
 }
 
 export function generator(storage: Storage): StoreModule {

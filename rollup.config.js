@@ -1,9 +1,4 @@
-import typescript from 'rollup-plugin-typescript';
-
-const ts_plugin = typescript({
-  include: 'src/**',
-  typescript: require('typescript')
-});
+import typescript from 'rollup-plugin-typescript2';
 
 const external = id => id.startsWith('svelte/');
 
@@ -21,7 +16,9 @@ export default [
       }
     ],
     external,
-    plugins: [ts_plugin]
+    plugins: [
+      typescript()
+    ]
   },
   {
     input: `src/session.ts`,
@@ -36,6 +33,8 @@ export default [
       }
     ],
     external,
-    plugins: [ts_plugin]
+    plugins: [
+      typescript()
+    ]
   }
 ];

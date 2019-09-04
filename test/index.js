@@ -15,7 +15,7 @@ window = {
 };
 
 const assert = require('assert');
-const { readable, writable, derived, get } = require('../index');
+const { readable, writable, derived, get } = require('../local');
 
 // const STORAGE_KEY = 'test.storage.key';
 

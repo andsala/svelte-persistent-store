@@ -1,4 +1,11 @@
 {
+  "files": [
+    "src/local.ts",
+    "src/session.ts"
+  ],
+  "exclude": [
+    "test/**"
+  ],
   "compilerOptions": {
     "rootDir": "src",
     "types": [],
@@ -13,7 +20,7 @@
     ],
     "target": "es2015",
     "declaration": true,
-    "declarationDir": "types",
+    "declarationDir": ".",
     "noEmitOnError": true,
     "noErrorTruncation": true,
     // rollup takes care of these
