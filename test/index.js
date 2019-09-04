@@ -41,7 +41,7 @@ describe('store', () => {
       count.set(3);
       count.update(n => n + 1);
 
-      assert.deepEqual(values, [0, 1, 2]);
+      assert.deepStrictEqual(values, [0, 1, 2]);
     });
 
     it('calls provided subscribe handler', () => {
@@ -54,17 +54,17 @@ describe('store', () => {
 
       const unsubscribe1 = store.subscribe(() => {
       });
-      assert.equal(called, 1);
+      assert.strictEqual(called, 1);
 
       const unsubscribe2 = store.subscribe(() => {
       });
-      assert.equal(called, 1);
+      assert.strictEqual(called, 1);
 
       unsubscribe1();
-      assert.equal(called, 1);
+      assert.strictEqual(called, 1);
 
       unsubscribe2();
-      assert.equal(called, 0);
+      assert.strictEqual(called, 0);
     });
 
     it('does not assume immutable data', () => {
@@ -78,10 +78,10 @@ describe('store', () => {
       });
 
       store.set(obj);
-      assert.equal(called, 2);
+      assert.strictEqual(called, 2);
 
       store.update(obj => obj);
-      assert.equal(called, 3);
+      assert.strictEqual(called, 3);
     });
 
     it('only calls subscriber once initially, including on resubscriptions', () => {
@@ -92,10 +92,10 @@ describe('store', () => {
       let count2 = 0;
 
       store.subscribe(() => count1 += 1)();
-      assert.equal(count1, 1);
+      assert.strictEqual(count1, 1);
 
       const unsubscribe = store.subscribe(() => count2 += 1);
-      assert.equal(count2, 1);
+      assert.strictEqual(count2, 1);
 
       unsubscribe();
     });
@@ -146,7 +146,7 @@ describe('store', () => {
       tick(3);
       tick(4);
 
-      assert.deepEqual(values, [0, 1, 2]);
+      assert.deepStrictEqual(values, [0, 1, 2]);
     });
   });
 
@@ -162,12 +162,12 @@ describe('store', () => {
       });
 
       a.set(2);
-      assert.deepEqual(values, [2, 4]);
+      assert.deepStrictEqual(values, [2, 4]);
 
       unsubscribe();
 
       a.set(3);
-      assert.deepEqual(values, [2, 4]);
+      assert.deepStrictEqual(values, [2, 4]);
     });
 
     it('maps multiple stores', () => {
@@ -183,12 +183,12 @@ describe('store', () => {
 
       a.set(4);
       b.set(5);
-      assert.deepEqual(values, [6, 12, 20]);
+      assert.deepStrictEqual(values, [6, 12, 20]);
 
       unsubscribe();
 
       a.set(6);
-      assert.deepEqual(values, [6, 12, 20]);
+      assert.deepStrictEqual(values, [6, 12, 20]);
     });
 
     it('passes optional set function', () => {
@@ -207,14 +207,14 @@ describe('store', () => {
       number.set(3);
       number.set(4);
       number.set(5);
-      assert.deepEqual(values, [0, 2, 4]);
+      assert.deepStrictEqual(values, [0, 2, 4]);
 
       unsubscribe();
 
       number.set(6);
       number.set(7);
       number.set(8);
-      assert.deepEqual(values, [0, 2, 4]);
+      assert.deepStrictEqual(values, [0, 2, 4]);
     });
 
     it('prevents glitches', () => {
@@ -231,7 +231,7 @@ describe('store', () => {
 
       lastname.set('Hyde');
 
-      assert.deepEqual(values, [
+      assert.deepStrictEqual(values, [
         'Henry Jekyll',
         'Edward Hyde'
       ]);
@@ -259,10 +259,10 @@ describe('store', () => {
         values.push(v);
       });
 
-      assert.deepEqual(values, ['a0b0']);
+      assert.deepStrictEqual(values, ['a0b0']);
 
       count.set(1);
-      assert.deepEqual(values, ['a0b0', 'a1b1']);
+      assert.deepStrictEqual(values, ['a0b0', 'a1b1']);
 
       unsubscribe();
     });
@@ -283,10 +283,10 @@ describe('store', () => {
         values.push(v);
       });
 
-      assert.deepEqual(values, ['b0a0']);
+      assert.deepStrictEqual(values, ['b0a0']);
 
       root.set({ a: 0, b: 1 });
-      assert.deepEqual(values, ['b0a0', 'b1a0']);
+      assert.deepStrictEqual(values, ['b0a0', 'b1a0']);
 
       unsubscribe();
     });
@@ -309,7 +309,7 @@ describe('store', () => {
       number.set(2);
       number.set(3);
 
-      assert.deepEqual(concatenated, [1, 2, 3]);
+      assert.deepStrictEqual(concatenated, [1, 2, 3]);
 
       unsubscribe();
     });
@@ -337,12 +337,12 @@ describe('store', () => {
       num.set(3);
       num.set(4);
 
-      assert.deepEqual(values, [4, 6, 8]);
-      assert.deepEqual(cleaned_up, [2, 3]);
+      assert.deepStrictEqual(values, [4, 6, 8]);
+      assert.deepStrictEqual(cleaned_up, [2, 3]);
 
       unsubscribe();
 
-      assert.deepEqual(cleaned_up, [2, 3, 4]);
+      assert.deepStrictEqual(cleaned_up, [2, 3, 4]);
     });
 
     it('discards non-function return values', () => {
@@ -364,7 +364,7 @@ describe('store', () => {
       num.set(3);
       num.set(4);
 
-      assert.deepEqual(values, [4, 6, 8]);
+      assert.deepStrictEqual(values, [4, 6, 8]);
 
       unsubscribe();
     });
@@ -374,11 +374,11 @@ describe('store', () => {
       const b = writable('b', 1);
       const c = derived('c', [a, b], ([a, b]) => `${a} ${b}`);
 
-      assert.deepEqual(get(c), 'one 1');
+      assert.deepStrictEqual(get(c), 'one 1');
 
       a.set('two');
       b.set(2);
-      assert.deepEqual(get(c), 'two 2');
+      assert.deepStrictEqual(get(c), 'two 2');
     });
   });
 
@@ -386,7 +386,7 @@ describe('store', () => {
     it('gets the current value of a store', () => {
       const store = readable('store', 42, () => {
       });
-      assert.equal(get(store), 42);
+      assert.strictEqual(get(store), 42);
     });
 
     it('works with RxJS-style observables', () => {
@@ -400,7 +400,7 @@ describe('store', () => {
         }
       };
 
-      assert.equal(get(observable), 42);
+      assert.strictEqual(get(observable), 42);
     });
   });
 });
