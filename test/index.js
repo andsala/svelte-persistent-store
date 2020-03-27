@@ -6,7 +6,7 @@ window = {
       return this.store[key] || null;
     },
     setItem(key, value) {
-      this.store[key] = value;
+      this.store[key] = `${value}`;
     },
     clear() {
       this.store = {};
@@ -104,9 +104,22 @@ describe('store', () => {
       const initial_value = 10;
       writable('store', initial_value);
 
-      const stored_value = window.localStorage.getItem('store');
+      const stored_value = JSON.parse(window.localStorage.getItem('store'));
 
       assert.strictEqual(initial_value, stored_value);
+    })
+
+    it('can store and retrieve objects', () => {
+      const initial_value = {count: 1};
+      let result_value = null;
+      writable('store', initial_value);
+      const store = writable('store', null);
+
+      store.subscribe(value => {
+        result_value = value;
+      });
+
+      assert.deepStrictEqual(initial_value, result_value);
     })
   });
 

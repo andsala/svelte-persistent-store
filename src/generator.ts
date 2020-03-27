@@ -38,7 +38,7 @@ export function generator(storage: Storage): StoreModule {
      * @param value initial value
      * @param {StartStopNotifier}start start and stop notifications for subscriptions
      */
-    function readable(key: string, value: string, start: StartStopNotifier<string>): Readable<string> {
+    function readable(key: string, value: any, start: StartStopNotifier<any>): Readable<any> {
         return {
             subscribe: writable(key, value, start).subscribe
         }
@@ -50,11 +50,11 @@ export function generator(storage: Storage): StoreModule {
      * @param {*=}value default value
      * @param {StartStopNotifier=}start start and stop notifications for subscriptions
      */
-    function writable(key: string, value: string, start: StartStopNotifier<string> = noop): Writable<string> {
-        function wrap_start(ogSet: Subscriber<string>) {
-            return start(function wrap_set(new_value: string) {
+    function writable(key: string, value: any, start: StartStopNotifier<any> = noop): Writable<any> {
+        function wrap_start(ogSet: Subscriber<any>) {
+            return start(function wrap_set(new_value: any) {
                 if (storage) {
-                    storage.setItem(key, new_value);
+                    storage.setItem(key, JSON.stringify(new_value));
                 }
                 return ogSet(new_value)
             });
@@ -62,25 +62,25 @@ export function generator(storage: Storage): StoreModule {
 
         if (storage) {
             if (storage.getItem(key)) {
-                value = storage.getItem(key);
+                value = JSON.parse(storage.getItem(key));
             }
-            storage.setItem(key, value);
+            storage.setItem(key, JSON.stringify(value));
         }
 
         const ogStore = ogWritable(value, start ? wrap_start : undefined);
 
-        function set(new_value: string): void {
+        function set(new_value: any): void {
             if (storage) {
-                storage.setItem(key, new_value);
+                storage.setItem(key, JSON.stringify(new_value));
             }
             ogStore.set(new_value);
         }
 
-        function update(fn: Updater<string>): void {
+        function update(fn: Updater<any>): void {
             set(fn(ogGet(ogStore)));
         }
 
-        function subscribe(run: Subscriber<string>, invalidate: Invalidator<string> = noop): Unsubscriber {
+        function subscribe(run: Subscriber<any>, invalidate: Invalidator<any> = noop): Unsubscriber {
             return ogStore.subscribe(run, invalidate);
         }
 
@@ -99,9 +99,9 @@ export function generator(storage: Storage): StoreModule {
     function derived<S extends Stores>(
         key: string,
         stores: S,
-        fn: (values: StoresValues<S>, set?: Subscriber<string>) => string | Unsubscriber | void,
-        initial_value?: string,
-    ): Readable<string> {
+        fn: (values: StoresValues<S>, set?: Subscriber<any>) => any | Unsubscriber | void,
+        initial_value?: any,
+    ): Readable<any> {
         const single = !Array.isArray(stores);
         const stores_array: Array<Readable<any>> = single
             ? [stores as Readable<any>]
@@ -127,7 +127,7 @@ export function generator(storage: Storage): StoreModule {
                 cleanup();
                 const result = fn(single ? values[0] : values, set);
                 if (auto) {
-                    set(result as string);
+                    set(result);
                 } else {
                     cleanup = is_function(result) ? result as Unsubscriber : noop;
                 }
