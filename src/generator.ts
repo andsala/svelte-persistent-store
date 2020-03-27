@@ -23,10 +23,18 @@ type Stores = Readable<any> | [Readable<any>, ...Array<Readable<any>>];
 type StoresValues<T> = T extends Readable<infer U> ? U :
     { [K in keyof T]: T[K] extends Readable<infer U> ? U : never };
 
+type SimpleDeriver<T,U> = (values: StoresValues<T>) => U
+type AdvancedDeriver<T,U> = (values: StoresValues<T>, set: Subscriber<U>) => Unsubscriber | void
+type Deriver<T,U> = SimpleDeriver<T, U> | AdvancedDeriver<T, U>
+
+function isSimpleDeriver<T,U>(deriver: Deriver<T,U>): deriver is SimpleDeriver<T,U> {
+    return deriver.length < 2;
+}
+
 export type StoreModule = {
-    readable: (key: string, value: string, start: StartStopNotifier<string>) => Readable<string>;
-    writable: (key: string, value: string, start?: StartStopNotifier<string>) => Writable<string>;
-    derived: <S extends Stores>(key: string, stores: S, fn: (values: StoresValues<S>, set?: Subscriber<string>) => string | Unsubscriber | void, initial_value?: string) => Readable<string>;
+    readable: <T>(key: string, value: T, start: StartStopNotifier<T>) => Readable<T>;
+    writable: <T>(key: string, value: T, start?: StartStopNotifier<T>) => Writable<T>;
+    derived: <S extends Stores, U>(key: string, stores: S, fn: Deriver<S,U>, initial_value?: U) => Readable<U>;
     get: typeof ogGet;
 }
 
@@ -38,7 +46,7 @@ export function generator(storage: Storage): StoreModule {
      * @param value initial value
      * @param {StartStopNotifier}start start and stop notifications for subscriptions
      */
-    function readable(key: string, value: any, start: StartStopNotifier<any>): Readable<any> {
+    function readable<T>(key: string, value: T, start: StartStopNotifier<T>): Readable<T> {
         return {
             subscribe: writable(key, value, start).subscribe
         }
@@ -50,9 +58,9 @@ export function generator(storage: Storage): StoreModule {
      * @param {*=}value default value
      * @param {StartStopNotifier=}start start and stop notifications for subscriptions
      */
-    function writable(key: string, value: any, start: StartStopNotifier<any> = noop): Writable<any> {
-        function wrap_start(ogSet: Subscriber<any>) {
-            return start(function wrap_set(new_value: any) {
+    function writable<T>(key: string, value: T, start: StartStopNotifier<T> = noop): Writable<T> {
+        function wrap_start(ogSet: Subscriber<T>) {
+            return start(function wrap_set(new_value: T) {
                 if (storage) {
                     storage.setItem(key, JSON.stringify(new_value));
                 }
@@ -69,18 +77,18 @@ export function generator(storage: Storage): StoreModule {
 
         const ogStore = ogWritable(value, start ? wrap_start : undefined);
 
-        function set(new_value: any): void {
+        function set(new_value: T): void {
             if (storage) {
                 storage.setItem(key, JSON.stringify(new_value));
             }
             ogStore.set(new_value);
         }
 
-        function update(fn: Updater<any>): void {
+        function update(fn: Updater<T>): void {
             set(fn(ogGet(ogStore)));
         }
 
-        function subscribe(run: Subscriber<any>, invalidate: Invalidator<any> = noop): Unsubscriber {
+        function subscribe(run: Subscriber<T>, invalidate: Invalidator<T> = noop): Unsubscriber {
             return ogStore.subscribe(run, invalidate);
         }
 
@@ -96,21 +104,19 @@ export function generator(storage: Storage): StoreModule {
      * @param {function(Stores=, function(*)=):*}fn function callback that aggregates the values
      * @param {*=}initial_value when used asynchronously
      */
-    function derived<S extends Stores>(
+    function derived<S extends Stores, U>(
         key: string,
         stores: S,
-        fn: (values: StoresValues<S>, set?: Subscriber<any>) => any | Unsubscriber | void,
-        initial_value?: any,
-    ): Readable<any> {
+        fn: Deriver<S,U>,
+        initial_value?: U,
+    ): Readable<U> {
         const single = !Array.isArray(stores);
         const stores_array: Array<Readable<any>> = single
             ? [stores as Readable<any>]
             : stores as Array<Readable<any>>;
 
-        const auto = fn.length < 2;
-
         if (storage && storage.getItem(key)) {
-            initial_value = storage.getItem(key);
+            initial_value = JSON.parse(storage.getItem(key));
         }
 
         return readable(key, initial_value, (set) => {
@@ -125,10 +131,11 @@ export function generator(storage: Storage): StoreModule {
                     return;
                 }
                 cleanup();
-                const result = fn(single ? values[0] : values, set);
-                if (auto) {
-                    set(result);
+                const input: StoresValues<S> = single ? values[0] : values;
+                if (isSimpleDeriver(fn)) {
+                    set(fn(input));
                 } else {
+                    const result = fn(input, set);
                     cleanup = is_function(result) ? result as Unsubscriber : noop;
                 }
             };
