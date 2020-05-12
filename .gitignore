@@ -6,10 +6,4 @@
 node_modules/
 
 # Build output
-/local.js
-/local.mjs
-/local.d.ts
-/session.js
-/session.mjs
-/session.d.ts
-/generator.d.ts
+/dist

@@ -9,11 +9,11 @@
     "url": "git+https://github.com/andsala/svelte-persistent-store.git"
   },
   "homepage": "https://github.com/andsala/svelte-persistent-store",
-  "main": "local.js",
-  "module": "local.mjs",
-  "types": "types/**",
+  "main": "dist/local.js",
+  "module": "dist/local.mjs",
+  "types": "dist/**",
   "scripts": {
-    "build": "rollup -c && npm run tsd",
+    "build": "rollup -c",
     "dev": "rollup -cw",
     "tsd": "tsc --emitDeclarationOnly",
     "test": "mocha"
@@ -27,22 +27,15 @@
     "svelte": "^3.9.1"
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.7",
-    "mocha": "^6.2.0",
-    "rollup": "^1.20.3",
-    "rollup-plugin-typescript2": "^0.24.0",
-    "svelte": "^3.9.1",
-    "tslib": "^1.10.0",
-    "typescript": "^3.6.2"
+    "@types/mocha": "^7.0.2",
+    "mocha": "^7.1.2",
+    "rollup": "^2.9.1",
+    "rollup-plugin-typescript2": "^0.27.0",
+    "svelte": "^3.22.2",
+    "tslib": "^1.11.2",
+    "typescript": "^3.8.3"
   },
   "files": [
-    "types",
-    "local.js",
-    "local.mjs",
-    "local.d.ts",
-    "session.js",
-    "session.mjs",
-    "session.d.ts",
-    "generator.d.ts"
+    "dist/**"
   ]
 }

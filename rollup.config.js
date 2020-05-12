@@ -1,40 +1,28 @@
 import typescript from 'rollup-plugin-typescript2';
 
+const distDir = 'dist';
+
 const external = id => id.startsWith('svelte/');
 
+const getBundle = (baseName) => ({
+  input: `src/${baseName}.ts`,
+  output: [
+    {
+      file: `${distDir}/${baseName}.mjs`,
+      format: 'esm',
+    },
+    {
+      file: `${distDir}/${baseName}.js`,
+      format: 'cjs',
+    }
+  ],
+  external,
+  plugins: [
+    typescript()
+  ]
+});
+
 export default [
-  {
-    input: `src/local.ts`,
-    output: [
-      {
-        file: `local.mjs`,
-        format: 'esm',
-      },
-      {
-        file: `local.js`,
-        format: 'cjs',
-      }
-    ],
-    external,
-    plugins: [
-      typescript()
-    ]
-  },
-  {
-    input: `src/session.ts`,
-    output: [
-      {
-        file: `session.mjs`,
-        format: 'esm',
-      },
-      {
-        file: `session.js`,
-        format: 'cjs',
-      }
-    ],
-    external,
-    plugins: [
-      typescript()
-    ]
-  }
+  getBundle('local'),
+  getBundle('session'),
 ];
