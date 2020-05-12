@@ -1,5 +1,8 @@
 # svelte-persistent-store
 
+[![npm version](https://badge.fury.io/js/svelte-persistent-store.svg)](https://badge.fury.io/js/svelte-persistent-store)
+[![Build Status](https://travis-ci.org/andsala/svelte-persistent-store.svg?branch=master)](https://travis-ci.org/andsala/svelte-persistent-store)
+
 Persist your [svelte store](https://svelte.dev/docs#svelte_store) in `localStorage` or `sessionStorage`.
 
 ## Install
