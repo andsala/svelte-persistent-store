@@ -9,8 +9,12 @@
     "url": "git+https://github.com/andsala/svelte-persistent-store.git"
   },
   "homepage": "https://github.com/andsala/svelte-persistent-store",
-  "main": "dist/local.js",
-  "module": "dist/local.mjs",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "exports": {
+    ".": "./dist/index.js",
+    "./": "./dist/"
+  },
   "types": "dist/**",
   "scripts": {
     "build": "rollup -c",

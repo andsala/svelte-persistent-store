@@ -25,6 +25,7 @@ const getBundle = (baseName) => ({
 });
 
 export default [
+  getBundle('index'),
   getBundle('local'),
   getBundle('session'),
 ];

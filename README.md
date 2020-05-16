@@ -16,7 +16,10 @@ npm install --save svelte-persistent-store
 Persist to `localStorage`
 
 ```javascript
-import { writable, readable, derived } from 'svelte-persistent-store/local';
+import { writable, readable, derived } from 'svelte-persistent-store/dist/local';
+// or
+import { local } from 'svelte-persistent-store';
+const { writable, readable, derived } = local;
 
 const count = writable('count', 0);
 
@@ -26,7 +29,10 @@ count.set(1);
 Persist to `sessionStorage`
 
 ```javascript
-import { writable, readable, derived } from 'svelte-persistent-store/session';
+import { writable, readable, derived } from 'svelte-persistent-store/dist/session';
+// or
+import { session } from 'svelte-persistent-store';
+const { writable, readable, derived } = session;
 
 const count = writable('count', 0);
 
