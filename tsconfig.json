@@ -4,31 +4,27 @@
     "src/session.ts"
   ],
   "exclude": [
-    "test/**"
+    "src/**/*.test.ts"
+  ],
+  "include": [
+    "src/**/*"
   ],
   "compilerOptions": {
-    "rootDir": "src",
-    "types": [],
-    // target node v8+ (https://node.green/)
-    // the only missing feature is Array.prototype.values
-    // "lib": ["es2017"],
-    // "target": "es2017",
     "lib": [
       "es2015",
       "dom",
       "dom.iterable"
     ],
-    "target": "es2015",
+    "target": "ES5",
     "declaration": true,
     "declarationDir": ".",
     "noEmitOnError": true,
     "noErrorTruncation": true,
     // rollup takes care of these
-    "module": "esnext",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    //"strict": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

@@ -18,7 +18,9 @@ const getBundle = (baseName) => ({
   ],
   external,
   plugins: [
-    typescript()
+    typescript({
+      tsconfig: "tsconfig.rollup.json"
+    })
   ]
 });
 

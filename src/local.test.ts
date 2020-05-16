@@ -1,23 +1,9 @@
-// Mock storage
-window = {
-  localStorage: {
-    store: {},
-    getItem(key) {
-      return this.store[key] || null;
-    },
-    setItem(key, value) {
-      this.store[key] = `${value}`;
-    },
-    clear() {
-      this.store = {};
-    }
-  }
-};
+import "mocha";
+import {assert} from "chai";
 
-const assert = require('assert');
-const { readable, writable, derived, get } = require('../dist/local.js');
+import "./mock/localStorage";
+import {readable, writable, derived, get} from "./local";
 
-// const STORAGE_KEY = 'test.storage.key';
 
 beforeEach(() => {
   window.localStorage.clear();
@@ -281,7 +267,7 @@ describe('store', () => {
     });
 
     it('derived dependency does not update and shared ancestor updates', () => {
-      const root = writable('root', { a: 0, b: 0 });
+      const root = writable('root', {a: 0, b: 0});
       const values = [];
 
       const a = derived('a', root, $root => {
@@ -298,7 +284,7 @@ describe('store', () => {
 
       assert.deepStrictEqual(values, ['b0a0']);
 
-      root.set({ a: 0, b: 1 });
+      root.set({a: 0, b: 1});
       assert.deepStrictEqual(values, ['b0a0', 'b1a0']);
 
       unsubscribe();
@@ -365,7 +351,6 @@ describe('store', () => {
 
       const d = derived('d', num, ($num, set) => {
         set($num * 2);
-        return {};
       });
 
       num.set(2);
