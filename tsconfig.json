@@ -16,12 +16,11 @@
       "dom",
       "dom.iterable"
     ],
-    "target": "ES5",
+    "target": "ES2018",
     "declaration": true,
     "declarationDir": ".",
     "noEmitOnError": true,
     "noErrorTruncation": true,
-    // rollup takes care of these
     "module": "CommonJS",
     "moduleResolution": "node",
     "resolveJsonModule": true,
