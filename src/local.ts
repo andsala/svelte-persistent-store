@@ -1,8 +1,6 @@
 import {generator} from './generator';
 
-const storage: Storage = typeof window !== 'undefined' ? window.localStorage : undefined;
-
-const g = generator(storage);
+const g = generator(window.localStorage);
 
 export const readable = g.readable;
 export const writable = g.writable;
