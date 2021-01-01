@@ -43,13 +43,18 @@ count.set(1);
 
 `key` parameter is used by `localStorage` and `sessionStorage` to store and retrieve the value.
 
-Only strings can be stored due to the [Storage](https://developer.mozilla.org/en-US/docs/Web/API/Storage) interface
-specification.
+The [Storage](https://developer.mozilla.org/en-US/docs/Web/API/Storage) interface specification only allows string
+values, therefore this library serializes stored values as JSON.
 
 ```typescript
-store = writable(key: string, value: string, (set: (value: string) => void) => () => void)
-store = readable(key: string, value: string, (set: (value: string) => void) => () => void)
-store = derived(key: string, a, callback: (a: any, set: (value: string) => void) => void | () => void, initial_value: string)
-store = derived(key: string, [a, ...b], callback: ([a: string, ...b: string[]], set: (value: string) => void) => void | () => void, initial_value: string)
+// writable store of `T` values
+store = writable(key: string, value: T, (set: (value: T) => void) => () => void)
+// readable store of `T` values
+store = readable(key: string, value: T, (set: (value: T) => void) => () => void)
+// store of `U` values derived from store `a` of `T` values
+store = derived(key: string, a, callback: (a: T, set: (value: U) => void) => void | () => void, initial_value: U)
+// store of `U` values derived from stores `[a, ...b]` of `[T1, T2, ...]` values
+store = derived(key: string, [a, ...b], callback: ([a: T1, ...b], set: (value: U) => void) => void | () => void, initial_value: U)
+// get value from a store (re-export from 'svelte/store')
 value: any = get(store)
 ```
